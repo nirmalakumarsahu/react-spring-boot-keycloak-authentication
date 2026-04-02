@@ -1,4 +1,5 @@
 import { useKeycloak } from "@react-keycloak/web";
+import Cars from "./Cars";
 
 const Dashboard = () => {
   const { keycloak } = useKeycloak();
@@ -14,13 +15,15 @@ const Dashboard = () => {
           })
         }
       >
-        Logout
+        Logout ({keycloak?.tokenParsed?.preferred_username})
       </button>
 
       <h3>User Info:</h3>
        <code style={{ whiteSpace: "pre-wrap", textAlign: "left" }}>
             {JSON.stringify(keycloak.tokenParsed, null, 2)}
       </code>
+
+      <Cars/>
     </div>
   );
 };

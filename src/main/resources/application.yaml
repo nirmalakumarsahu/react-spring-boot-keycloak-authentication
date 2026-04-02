@@ -1,0 +1,13 @@
+server:
+  port: 9898
+
+spring:
+  application:
+    name: react-spring-boot-keycloak-authentication
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          #jwk-set-uri: http://localhost:8080/realms/springboot-test/protocol/openid-connect/certs
+          issuer-uri: http://localhost:8989/realms/springboot-test
