@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "react-keycloak",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-keycloak/web": "^3.4.0",
+    "keycloak-js": "^26.2.3",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.13.2",
+    "react-syntax-highlighter": "^16.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
