@@ -15,7 +15,7 @@ const Dashboard = () => {
           })
         }
       >
-        Logout ({keycloak?.tokenParsed?.preferred_username})
+        Logout ({keycloak?.tokenParsed?.name})
       </button>
 
       <h3>User Info:</h3>
