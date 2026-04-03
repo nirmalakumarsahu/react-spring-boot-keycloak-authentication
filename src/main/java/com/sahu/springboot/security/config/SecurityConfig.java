@@ -44,6 +44,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         AppProperties.Cors cors = appProperties.getCors();
+        log.info("Cors {}", cors);
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(cors.getUrls());
         config.setAllowedMethods(cors.getMethods());

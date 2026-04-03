@@ -2,6 +2,7 @@ package com.sahu.springboot.security.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,6 +19,7 @@ public class AppProperties {
 
     @Setter
     @Getter
+    @ToString
     public static class Cors {
         private List<String> urls;
         private List<String> methods;
