@@ -2,6 +2,7 @@ package com.sahu.springboot.security.config;
 
 import com.sahu.springboot.security.config.properties.AppProperties;
 import com.sahu.springboot.security.constants.KeycloakConstants;
+import com.sahu.springboot.security.constants.RoleConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/cars/**").hasRole("view-cars")
+                        .requestMatchers("/api/v1/cars/**").hasRole(RoleConstants.VIEW_CARS.getValue())
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
@@ -67,7 +68,7 @@ public class SecurityConfig {
             if (realmAccess != null && realmAccess.get(KeycloakConstants.ROLES.getValue()) instanceof List<?> roles) {
                 log.info("roles 1 {}", roles);
                 roles.forEach(role ->
-                        authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
+                        authorities.add(new SimpleGrantedAuthority(RoleConstants.ROLE_PREFIX.getValue() + role))
                 );
             }
 
@@ -76,7 +77,7 @@ public class SecurityConfig {
                 if (client.get(KeycloakConstants.ROLES.getValue()) instanceof List<?> roles) {
                     log.info("roles 2 {}", roles);
                     roles.forEach(role ->
-                            authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
+                            authorities.add(new SimpleGrantedAuthority(RoleConstants.ROLE_PREFIX.getValue() + role))
                     );
                 }
             }

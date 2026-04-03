@@ -5,12 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum KeycloakConstants {
-    REALM_ACCESS("realm_access"),
-    RESOURCE_ACCESS("resource_access"),
-    ROLES("roles"),
+public enum RoleConstants {
+    ROLE_PREFIX("ROLE_"),
+    VIEW_CARS("view-cars")
 
     ;
-
     private final String value;
 }
