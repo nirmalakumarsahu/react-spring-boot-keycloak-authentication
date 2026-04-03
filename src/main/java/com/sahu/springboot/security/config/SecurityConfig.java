@@ -1,5 +1,8 @@
 package com.sahu.springboot.security.config;
 
+import com.sahu.springboot.security.config.properties.AppProperties;
+import com.sahu.springboot.security.constants.KeycloakConstants;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.cors.*;
 
 import java.util.*;
@@ -16,8 +20,11 @@ import java.util.List;
 
 @Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final AppProperties appProperties;
+    
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -36,10 +43,11 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        AppProperties.Cors cors = appProperties.getCors();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
+        config.setAllowedOrigins(cors.getUrls());
+        config.setAllowedMethods(cors.getMethods());
+        config.setAllowedHeaders(cors.getHeaders());
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -54,17 +62,17 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(jwt -> {
             Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-            Map<String, Object> realmAccess = jwt.getClaim("realm_access");
-            if (realmAccess != null && realmAccess.get("roles") instanceof List<?> roles) {
+            Map<String, Object> realmAccess = jwt.getClaim(KeycloakConstants.REALM_ACCESS.getValue());
+            if (realmAccess != null && realmAccess.get(KeycloakConstants.ROLES.getValue()) instanceof List<?> roles) {
                 log.info("roles 1 {}", roles);
                 roles.forEach(role ->
                         authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
                 );
             }
 
-            Map<String, Object> resourceAccess = jwt.getClaim("resource_access");
-            if (resourceAccess != null && resourceAccess.get("react-app") instanceof Map<?, ?> client) {
-                if (client.get("roles") instanceof List<?> roles) {
+            Map<String, Object> resourceAccess = jwt.getClaim(KeycloakConstants.RESOURCE_ACCESS.getValue());
+            if (resourceAccess != null && resourceAccess.get(appProperties.getOauth2ClientName()) instanceof Map<?, ?> client) {
+                if (client.get(KeycloakConstants.ROLES.getValue()) instanceof List<?> roles) {
                     log.info("roles 2 {}", roles);
                     roles.forEach(role ->
                             authorities.add(new SimpleGrantedAuthority("ROLE_" + role))
